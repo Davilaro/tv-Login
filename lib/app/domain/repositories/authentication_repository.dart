@@ -1,5 +1,5 @@
 import '../either.dart';
-import '../enums.dart';
+import '../failures/sign_failure/sign_in_failure.dart';
 import '../models/user/user.dart';
   //Definir funcion para que un usuario pueda logearse
   //Esta funcion debe retornar un future porque realizara

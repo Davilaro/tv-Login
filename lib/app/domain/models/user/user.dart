@@ -1,31 +1,34 @@
-import 'package:equatable/equatable.dart';
-import 'package:json_annotation/json_annotation.dart';
+// ignore_for_file: invalid_annotation_target
 
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'user.freezed.dart';
 part 'user.g.dart';
 
-@JsonSerializable()
-class User extends Equatable {
-  const User({
-   required this.id, 
-   required this.username,
-   required this.avatarPath
-   });
+@freezed
+class User with _$User {
+  const factory User({
+    required int id,
+    required String username,
+    
+    ///
+    @JsonKey(
+      name: 'avatar',
+      fromJson: avatarPathFromJson,
+    )
+    String? avatarPath,
+  }) = _User;
+  const User._();
+  
+  String getFormatted(){
+  return '$username $id'; 
+}
+
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+}
 
 
-   final int id;
-   final String username;
 
-   @JsonKey(name: 'avatar', fromJson: avatarPathFromJson)
-   final String? avatarPath;
-
-  @override
-  List<Object?> get props => [id,username,];
-
- Map <String, dynamic> toJson() => _$UserToJson(this);
-
- factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
- }
-
-String? avatarPathFromJson( Map<String, dynamic> json ){
+String? avatarPathFromJson(Map<String, dynamic> json) {
   return json['tmdb']?['avatar_path'] as String?;
 }
