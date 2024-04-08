@@ -42,6 +42,7 @@ class SubmitButton extends StatelessWidget {
           network: () => 'Network Error',
           unauthorized: () => 'Invalid password',
           unknown: () => 'Error',
+          notVerified: () => 'Email not verified'
         );
         
 

@@ -7,6 +7,7 @@ StackTrace? stackTrace
   if(kDebugMode){
    log(
       '''
+********************
 --------------------------------------------
       ${const JsonEncoder.withIndent(' ').convert(logs)}
 --------------------------------------------

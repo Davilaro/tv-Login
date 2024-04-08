@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../modules/home/view/home_view.dart';
+import '../modules/home/views/home_view.dart';
 import '../modules/offline/offline/offline.view.dart';
 import '../modules/sign_in/view/sign_in_view.dart';
 import '../modules/splash/views/splash_view.dart';

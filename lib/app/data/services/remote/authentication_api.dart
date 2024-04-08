@@ -1,6 +1,5 @@
-
-import '../../../domain/either.dart';
-import '../../../domain/failures/sign_failure/sign_in_failure.dart';
+import '../../../domain/either/either.dart';
+import '../../../domain/failures/sign_in/sign_in_failure.dart';
 import '../../http/http.dart';
 
 class AuthenticationAPI {
@@ -15,19 +14,25 @@ class AuthenticationAPI {
     if (failure.statusCode != null) {
       print('🐶 failure.statusCode ${failure.statusCode}');
       switch (failure.statusCode!) {
-        case 401: //Para contrase;a invalida
-          return Either.left( SignInFailure.unauthorized());
+        case 401:
+        //Para validar si el correo ya fue confirmado
+          if (failure.data is Map && (failure.data as Map)['status_code'] == 32) {
+            return Either.left(SignInFailure.notVerified());
+          }
+
+          //Para contraseña invalida
+          return Either.left(SignInFailure.unauthorized());
         case 404: //Username invalido
-          return Either.left( SignInFailure.notFound());
+          return Either.left(SignInFailure.notFound());
         default:
-          return Either.left( SignInFailure.unknown());
+          return Either.left(SignInFailure.unknown());
       }
     }
 
     if (failure.exception is NetworkException) {
-      return Either.left( SignInFailure.network());
+      return Either.left(SignInFailure.network());
     }
-    return Either.left( SignInFailure.unknown());
+    return Either.left(SignInFailure.unknown());
   }
 
   Future<Either<SignInFailure, String>> createRequestToken() async {
@@ -39,8 +44,8 @@ class AuthenticationAPI {
       },
     );
     return result.when(
-       left:  _handleFailure,
-      right:   (requesToken) => Either.right(
+        left: _handleFailure,
+        right: (requesToken) => Either.right(
               requesToken,
             ));
   }
@@ -65,8 +70,8 @@ class AuthenticationAPI {
     );
 
     return result.when(
-    left:   _handleFailure,
-    right:   (newRequestToken) => Either.right(
+      left: _handleFailure,
+      right: (newRequestToken) => Either.right(
         newRequestToken,
       ),
     );
@@ -74,22 +79,19 @@ class AuthenticationAPI {
 
   Future<Either<SignInFailure, String>> createSession(
       String requestToken) async {
-    final result = await _http.request(
-      '/authentication/session/new', 
-      method: HttpMethod.post, 
-      body: {
+    final result = await _http
+        .request('/authentication/session/new', method: HttpMethod.post, body: {
       'request_token': requestToken,
-    }, 
-    onSuccess: (responseBody) {
+    }, onSuccess: (responseBody) {
       final json = responseBody as Map;
       return json['session_id'] as String;
     });
 
     return result.when(
-      left:   _handleFailure,
-      right:   (sessionId) => Either.right(
-          sessionId,
-          ),
-        );
+      left: _handleFailure,
+      right: (sessionId) => Either.right(
+        sessionId,
+      ),
+    );
   }
 }
