@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'widgets/movies_and_series/trending_list.dart';
-import 'widgets/performers/trending_performers.dart';
+import 'widgets/trending_list.dart';
+import 'widgets/trending_performers.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -13,6 +13,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
+
     return  const Scaffold(
       body: Center(
         child: SafeArea(
