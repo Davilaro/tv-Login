@@ -9,11 +9,13 @@ import 'app/data/http/http.dart';
 import 'app/data/repositories_implementation/account_repository_impl.dart';
 import 'app/data/repositories_implementation/authentication_repository_impl.dart';
 import 'app/data/repositories_implementation/connectivity_repository_impl.dart';
+import 'app/data/repositories_implementation/movie_repository_impl.dart';
 import 'app/data/repositories_implementation/trending_repository_impl.dart';
 import 'app/data/services/local/session_service.dart';
 import 'app/data/services/remote/account_api.dart';
 import 'app/data/services/remote/authentication_api.dart';
 import 'app/data/services/remote/internet_checker.dart';
+import 'app/data/services/remote/movies_api.dart';
 import 'app/data/services/remote/trending_api.dart';
 import 'app/domain/repositories/account_repository.dart';
 import 'app/domain/repositories/authentication_repository.dart';
@@ -59,6 +61,12 @@ void main() {
               Provider<TrendingRepository>(
                 create: (_) => TrendingRepositoryImpl(
                   TrendingAPI(http)
+                )
+                ),
+                
+                Provider<MovieRepositoryImpl>(
+                create: (_) => MovieRepositoryImpl(
+                  MoviesApi(http)
                 )
                 ),
               ChangeNotifierProvider<SessionController>(
